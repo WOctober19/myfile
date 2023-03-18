@@ -31,8 +31,16 @@ func NewRouter() *gin.Engine {
 		//获取用户信息
 		v1.GET("user/info", api.UserInfo)
 
-		//上传文件
-		v1.POST("user/uploadfile", api.FileUpload)
+		//文件相关路由
+		v1.POST("file/file", api.FileUpload)
+		v1.GET("file/file", api.FileList)
+		v1.GET("file/file/:id", api.FileInfo)
+
+		//文件夹相关路由
+		v1.POST("file/folder", api.FolderCreate)
+		v1.PUT("file/folder/:id", api.FolderUpdate)
+		v1.GET("file/folder/:id", api.FolderInfo)
+		v1.GET("file/folder", api.FolderList)
 
 		// 需要登录保护的
 		//auth := v1.Group("")

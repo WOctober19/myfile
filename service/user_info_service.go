@@ -7,7 +7,7 @@ import (
 	"myfile/serializer"
 )
 
-// UserLoginService 管理用户登录的服务
+// UserInfoService 管理用户信息的服务
 type UserInfoService struct {
 	Token string `form:"token" json:"token" binding:"required"`
 }

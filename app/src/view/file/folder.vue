@@ -8,11 +8,9 @@
             </div>
         </div>
         <Modal
-            v-model="modal1"
+            v-model="uploadFile"
             class-name="vertical-center-modal"
-            title="上传文件"
-            @on-ok="ok"
-            @on-cancel="cancel">
+            title="上传文件">
             <Upload
                 multiple
                 type="drag"
@@ -25,6 +23,22 @@
                 </div>
             </Upload>
         </Modal>
+
+        <Modal
+            v-model="Folder"
+            title="创建文件夹"
+            @on-ok="okFolder"
+            @on-cancel="cancelFolder">
+            <Form :model="folder" label-position="left" :label-width="100">
+                
+                <FormItem label="文件夹名" v-if="createF">
+                    <Input v-model="folder.name"></Input>
+                </FormItem>
+                <FormItem label="文件夹备注" v-if="createF">
+                    <Input v-model="folder.introduce"></Input>
+                </FormItem>
+            </Form>
+        </Modal>
         </div>
    
 </template>
@@ -32,16 +46,22 @@
 <script>
     import Vue from 'vue';
     import SparkMD5 from 'spark-md5';
+    import axios from 'axios'
     import { getUser } from '@/libs/util'
     import Contextmenu from "vue-contextmenujs";
     Vue.use(Contextmenu);
     export default {
         data () {
             return {
-                modal1: false,
+                uploadFile: false,
+                Folder:false,
+                createF:false,
                 fileParam:{
                     hash:"",
-                    uid:2
+                    uid:getUser("userId")
+                },
+                folder:{
+                    uid:parseInt(getUser("userId"))
                 },
                 isclickAll:0,
             }
@@ -73,8 +93,8 @@
                     {
                         label: "创建文件夹",
                         onClick: () => {
-                        this.message = "重命名";
-                        console.log("重命名");
+                            this.Folder = true
+                            this.createF = true
                         }
                     }
                 ],
@@ -107,7 +127,7 @@
                         {
                             label: "此文件夹中上传文件",
                             onClick: () => {
-                            this.modal1 = true;
+                            this.uploadFile = true;
                             console.log("此文件夹中上传文件");
                             }
                         }
@@ -123,12 +143,15 @@
                 },300)
                 return false;
             },
-            ok () {
-                console.log(getUser("userId"))
-                this.$modal1=false;
+            okFolder () {
+                axios.post('/api/api/file/folder', this.folder).then(function (response) {
+                    console.log(response);
+                }).catch(function (error) {
+                    console.log(error);
+                });
             },
-            cancel () {
-                this.$modal1=false;
+            cancelFolder () {
+                this.Folder=false;
             },
             getFileHash(file){
                 return new Promise( resolve => {

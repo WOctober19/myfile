@@ -14,6 +14,7 @@ type File struct {
 	CreatedAt int64  `json:"created_at"`
 }
 
+// BuildFile 序列化文件
 func BuildFile(file model.File) File {
 	return File{
 		ID:        file.ID,
@@ -25,4 +26,13 @@ func BuildFile(file model.File) File {
 		Sha1:      file.Sha1,
 		CreatedAt: file.CreatedAt.Unix(),
 	}
+}
+
+// BuildFileListResponse 序列化文件列表
+func BuildFileListResponse(folderList []model.File) (list []File) {
+	for _, item := range folderList {
+		folder := BuildFile(item)
+		list = append(list, folder)
+	}
+	return list
 }

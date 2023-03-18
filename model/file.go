@@ -7,13 +7,14 @@ import (
 
 type File struct {
 	gorm.Model
-	Uid      int64
-	Path     string
-	FileName string
-	SaveName string
-	Ext      string
-	Size     int64
-	Sha1     string
+	Uid      int64  `gorm:"comment:用户ID"`
+	Fid      int64  `gorm:"comment:文件夹ID"`
+	Path     string `gorm:"comment:文件路径"`
+	FileName string `gorm:"comment:文件名"`
+	SaveName string `gorm:"comment:保存文件名"`
+	Ext      string `gorm:"comment:文件类型"`
+	Size     int64  `gorm:"comment:文件大小"`
+	Sha1     string `gorm:"comment:文件hash"`
 }
 
 func FastUploadFile(sha1 string) (bool, File) {
